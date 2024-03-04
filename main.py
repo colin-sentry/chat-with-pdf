@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import bs4
+from flask import Flask, request, Response
 from langchain import hub
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
@@ -38,10 +39,21 @@ def format_docs(docs):
 
 
 rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    | prompt
-    | llm
-    | StrOutputParser()
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
 )
 
-print(rag_chain.invoke("What is Task Decomposition?"))
+app = Flask(__name__)
+
+
+@app.route("/api/v1/questions", methods=["GET"])
+def get_question():
+    question = request.args.get("q")
+
+    answer = rag_chain.stream(question)
+    return Response(answer, mimetype="text/plain")
+
+
+app.run(port=8080, debug=True)
