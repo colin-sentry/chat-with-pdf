@@ -6,7 +6,7 @@ function App() {
   const [answer, setAnswer] = useState("");
   return (
     <>
-      <h1>AI RAG app</h1>
+      <h1>Ask Sentry</h1>
         <form onSubmit={e => {
             e.preventDefault();
 

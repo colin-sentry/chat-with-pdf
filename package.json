@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "backend": "./.venv/bin/python3 main.py"
+    "backend": "PYTHONUNBUFFERED=1 ./.venv/bin/python3 main.py"
   },
   "dependencies": {
     "react": "^18.2.0",
