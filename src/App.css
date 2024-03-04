@@ -7,13 +7,15 @@
 
 form {
   display: flex;
+  justify-content: center;
   gap: 8px;
+  margin-bottom: 8px;
+}
+
+div {
+  max-width: 800px;
 }
 
 .card {
   padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
