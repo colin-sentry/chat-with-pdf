@@ -16,6 +16,18 @@ div {
   max-width: 800px;
 }
 
+.whitespace-pre {
+  white-space: pre-wrap;
+}
+
 .card {
   padding: 2em;
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-2 {
+  gap: 8px;
 }

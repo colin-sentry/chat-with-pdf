@@ -2,8 +2,8 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [answerDone, setAnswerDone] = useState(false);
   return (
     <>
       <h1>Ask Sentry</h1>
@@ -12,7 +12,10 @@ function App() {
 
             (async () => {
                 setAnswer("");
-                const resp = await fetch("/api/v1/questions?q="+encodeURIComponent(question));
+                setAnswerDone(false);
+                const formData = new FormData(e.currentTarget);
+                const resp = await fetch("/api/v1/questions?q="+encodeURIComponent(formData.get("question") as string) +
+                    "&model="+encodeURIComponent(formData.get("model") as string));
                 if(!resp.ok || !resp.body) {
                     throw new Error("Bad response")
                 }
@@ -28,13 +31,25 @@ function App() {
                         setAnswer(answer => answer+decoded);
                     }
                 }
+                setAnswerDone(true);
             })()
 
         }}>
-            <input value={question} onChange={e => setQuestion(e.target.value)} placeholder="Ask a question"/>
+            <input name="question" placeholder="Ask a question"/>
+            <select name="model">
+                <option value="gpt3">GPT 3</option>
+                <option value="gpt4">GPT 4</option>
+                <option value="claude">Anthropic Claude</option>
+                <option value="cohere">Cohere</option>
+                <option value="huggingface">Huggingface</option>
+            </select>
             <button type="submit">Submit</button>
         </form>
-        <div>{answer}</div>
+        <div className="whitespace-pre">{answer}</div>
+        {answerDone ? <div className="flex gap-2">
+            <button>👍</button>
+            <button>👎</button>
+        </div> : null}
     </>
   )
 }
